@@ -20,7 +20,19 @@ By calling the method POST at route '/continents', *writer.py* creates a new ent
 
 ## Part 2
 For part 2 the "writer" script has been modified and divided into 2:
-* *db_manager*: define dbManager class which methods post, update or delete entries in the data base.
+* *db_manager:* define dbManager class which methods post, update or delete entries in the data base.
 * *writer_for_broker*: some of the functions from *writer.py* have been updated to work as "consumers" of Kafka broker instead of Flask app functions.
 
-*client.py*: this script work as "producer" for Kafka broker. Publish some 'topics' with the information of http requests from FLask app
+*client.py:* this script work as "producer" for Kafka broker. Publish some 'topics' with the information of http requests from FLask app
+
+### Test the aplication so far
+
+* Launch Zookeeper and Kafka
+* Add to Kafka the topics: 'continent' and 'country'
+* Run both python scripts: *client.py* and *writer_for_broker.py*
+* Send http requests to http://0.0.0.0:5000/continent and http://0.0.0.0:5000/country using PUT, POST or DELETE methods.
+(For more details about acepted arguments see *models.py*)
+
+<br/>
+
+**Potential improvement:** add RecordMetadata functionalities to *client.py*

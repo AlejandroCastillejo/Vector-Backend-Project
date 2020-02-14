@@ -15,10 +15,9 @@ class dbManager:
         self.validateContinentData(_name, _population, _area)
         self.session.add(new_continent)
         self.session.commit()
-        # return jsonify(Continent = new_continent.serialize)
+        print ("Continent '%s' added to db"% _name)
 
     def updateContinent(self, _name, _population, _area):
-        print 'update continent'
         continent = self.session.query(Continent).filter_by(name = _name).one()
         #only update entries if params are received, this way it doesn't erase previous data
         if _population != '':
@@ -28,39 +27,51 @@ class dbManager:
         self.validateContinentData(_name, _population, _area)
         self.session.add(continent)
         self.session.commit()
-        # return jsonify(Continent = continent.serialize)
+        print ("Continent '%s' updated"% _name)
+
 
     def deleteContinent(self, _name):
         continent = self.session.query(Continent).filter_by(name = _name).one()
         self.session.delete(continent)
         self.session.commit()
-        return ("Continent '%s' deleted"% _name)
+        print ("Continent '%s' deleted"% _name)
 
     def continentExists(self, _name):
-        # print 'debug: continent exists function'
         if self.session.query(exists().where(Continent.name == _name)).scalar():
             return True
     
-#TODO include logic validation. E.g., sum of population in countries of the same continent can't be greater than continent population
+    # include logic validation. E.g., sum of population in countries of the same continent can't be greater than continent population
     def validateContinentData(self, _name, _population, _area):
-        print ('debug: validate continent data')
-        try:
-            countries = self.session.query(Country).filter(continent)
-            print countries
-        except:
-            print ('no country of this continent found')
+        countries = self.session.query(Country).filter_by(continent=_name).all()
+        sum_area = 0
+        sum_population = 0
+        for country in countries:
+            sum_area += country.area
+            sum_population += country.population
+        if countries != []: 
+            if int(_area) < sum_area:
+                print("Validation error: area of this continent must be greater than sum of it's countries area")
+            else:
+                print("Validation ok: area of this continent is equal or greater than sum of it's countries area")
+            if int(_population) < sum_population:
+                print("Validation error: population of this continent must be greater than sum of it's countries population")
+            else:
+                print("Validation ok: population of this continent is equal or greater than sum of it's countries population")
+        else:
+            print("Validation: No entries on data base to validate population and area values")
 
 
 
 
-    def createNewCountry(_name, _continent, _population, _area, _hospitals, _national_parks, _rivers, _schools):
+
+    def createNewCountry(self, _name, _continent, _population, _area, _hospitals, _national_parks, _rivers, _schools):
         new_country = Country(name = _name, continent = _continent, population = _population, area = _area, hospitals = _hospitals, \
                                 national_parks = _national_parks, rivers = _rivers, schools = _schools)
         self.session.add(new_country)
         self.session.commit()
-        # return jsonify(Country = new_country.serialize)
+        print ("Country '%s' added to db"% _name)
 
-    def updateCountry(_name, _continent, _population, _area, _hospitals, _national_parks, _rivers, _schools):
+    def updateCountry(self, _name, _continent, _population, _area, _hospitals, _national_parks, _rivers, _schools):
         country = self.session.query(Country).filter_by(name = _name).one()
         #only update entries if params are received, this way it doesn't erase previous data
         if _continent != '':
@@ -73,9 +84,10 @@ class dbManager:
     #TODO better create a list of params and use for loop
         self.session.add(country)
         self.session.commit()
-        # return jsonify(Country = country.serialize)
+        return ("Country '%s' updated"% _name)
 
-    def deleteCountry(_name):
+
+    def deleteCountry(self, _name):
         country = self.session.query(Country).filter_by(name = _name).one()
         self.session.delete(country)
         self.session.commit()
