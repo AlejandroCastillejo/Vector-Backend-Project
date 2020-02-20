@@ -46,3 +46,7 @@ For part 3 it has been created the script *user_model* which defines the Users t
 The application can be tested proceding as before but running the script *client_with_logging.py* instead *client.py*. 
 In this case the user should be previously registered. It can be done by sendind a POST request to http://0.0.0.0:5000/new_user with the arguments *username* and *password*.
 Once a user is registered, it can send requests to http://0.0.0.0:5000/continent and http://0.0.0.0:5000/country just adding *username* and *password* in basic authentification.
+
+### Docker
+You can find a docker image which contains this package and the requuiered dependencies in the following link:
+https://hub.docker.com/repository/docker/alejandroacc/vector_backend_project
