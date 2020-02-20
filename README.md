@@ -8,6 +8,8 @@ The code in this repository require the following libraries to be installed:
 * SQLAlchemy
 * Zookeeper and Kafka
 * kafka-python
+* passlib
+* flask-httpauth
 <br/>
 
 ## Part 1
@@ -36,3 +38,11 @@ For part 2 the "writer" script has been modified and divided into 2:
 <br/>
 
 **Potential improvement:** add RecordMetadata functionalities to *client.py*
+
+
+## Part 3 
+For part 3 it has been created the script *user_model* which defines the Users table model and creates the dadabase *users.db* that keep users usernamens and encripted passwords.
+
+The application can be tested proceding as before but running the script *client_with_logging.py* instead *client.py*. 
+In this case the user should be previously registered. It can be done by sendind a POST request to http://0.0.0.0:5000/new_user with the arguments *username* and *password*.
+Once a user is registered, it can send requests to http://0.0.0.0:5000/continent and http://0.0.0.0:5000/country just adding *username* and *password* in basic authentification.
