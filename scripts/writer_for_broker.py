@@ -2,6 +2,8 @@ from kafka import KafkaConsumer
 from json import loads
 from db_manager import dbManager
 
+import test_logging_2
+
 db = dbManager()   #crete object of dbManager class
 
 consumer = KafkaConsumer(
@@ -69,7 +71,6 @@ def countriesFunction(_message):
     country_args = ['name', 'continent', 'population', 'area', 'hospitals', 
                     'national_parks', 'rivers', 'schools']
     for arg in country_args:
-        print arg
         try:
             exec("%s = _message.value['args']['%s']"% (arg, arg))
         except KeyError:
